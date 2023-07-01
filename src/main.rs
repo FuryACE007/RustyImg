@@ -1,3 +1,5 @@
+use image::DynamicImage;
+
 
 fn main() {
     // Challenge: If you're feeling really ambitious, you could delete this code
@@ -51,8 +53,18 @@ fn main() {
 
             crop(infile, outfile, x, y, width, height);
         }
-        // **OPTION**
-        // Rotate -- see the rotate() function below
+        
+        "rotate" => {
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            let infile = args.remove(0);
+            let outfile = args.remove(0);
+            let rotation_value: u32 = args.remove(0).parse().unwrap();
+
+            rotate(infile, outfile, rotation_value);
+        }
 
         // **OPTION**
         // Invert -- see the invert() function below
@@ -124,15 +136,28 @@ fn crop(_infile: String, _outfile: String, _x: u32, _y: u32, _width: u32, _heigh
     // See blur() for an example of how to save the image.
 }
 
-fn rotate(infile: String, outfile: String) {
+fn rotate(_infile: String, _outfile: String, _rotation_value: u32) {
     // See blur() for an example of how to open an image.
+    let mut img = image::open(_infile).expect("Can't open image");
+    let mut img2: DynamicImage;
 
+    if _rotation_value == 90 {
+       img2 = img.rotate90();
+    } else if _rotation_value == 180 {
+        img2 = img.rotate180();
+    } else if _rotation_value == 270 {
+        img2 = img.rotate270();
+    } else {
+        println!("Invalid rotation value ( choose either 90 or 180 or 270 )");
+        std::process::exit(1);
+    }
     // There are 3 rotate functions to choose from (all clockwise):
     //   .rotate90()
     //   .rotate180()
     //   .rotate270()
     // All three methods return a new image.  Pick one and use it!
 
+    img2.save(_outfile).expect("Couldn't save image");
     // Challenge: parse the rotation amount from the command-line, pass it
     // through to this function to select which method to call.
 
