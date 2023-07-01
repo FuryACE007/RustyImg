@@ -66,11 +66,27 @@ fn main() {
             rotate(infile, outfile, rotation_value);
         }
 
-        // **OPTION**
-        // Invert -- see the invert() function below
+        "invert" => {
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
 
-        // **OPTION**
-        // Grayscale -- see the grayscale() function below
+            let infile = args.remove(0);
+            let outfile = args.remove(0);
+            
+            invert(infile, outfile);
+        }
+        
+        "grayscale" => {
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            let infile = args.remove(0);
+            let outfile = args.remove(0);
+            
+            grayscale(infile, outfile);
+        }
 
         // A VERY DIFFERENT EXAMPLE...a really fun one. :-)
         "fractal" => {
@@ -102,43 +118,28 @@ fn print_usage_and_exit() {
 }
 
 fn blur(_infile: String, _outfile: String, _blur_amt: f32) {
-    // Here's how you open an existing image file
     let img = image::open(_infile).expect("Failed to open INFILE.");
-    // **OPTION**
-    // Parse the blur amount (an f32) from the command-line and pass it through
-    // to this function, instead of hard-coding it to 2.0.
     let img2 = img.blur(_blur_amt);
-    // Here's how you save an image to a file.
+  
     img2.save(_outfile).expect("Failed writing OUTFILE.");
 }
 
 fn brighten(_infile: String, _outfile: String, _value: i32) {
-    // See blur() for an example of how to open / save an image.
     let img = image::open(_infile).expect("Couldn't open image");
-    // .brighten() takes one argument, an i32.  Positive numbers brighten the
-    // image. Negative numbers darken it.  It returns a new image.
     let img2 = img.brighten(_value);
-    img2.save(_outfile).expect("Couldn't save image");
 
-    // Challenge: parse the brightness amount from the command-line and pass it
-    // through to this function.
+    img2.save(_outfile).expect("Couldn't save image");
 }
 
 fn crop(_infile: String, _outfile: String, _x: u32, _y: u32, _width: u32, _height: u32) {
-    // See blur() for an example of how to open an image.
     let mut img = image::open(_infile).expect("Can't open image");
-    // .crop() takes four arguments: x: u32, y: u32, width: u32, height: u32
-    // You may hard-code them, if you like.  It returns a new image.
     let img2 = img.crop(_x, _y, _width, _height);
-    // Challenge: parse the four values from the command-line and pass them
-    // through to this function.
+
     img2.save(_outfile).unwrap();
-    // See blur() for an example of how to save the image.
 }
 
 fn rotate(_infile: String, _outfile: String, _rotation_value: u32) {
-    // See blur() for an example of how to open an image.
-    let mut img = image::open(_infile).expect("Can't open image");
+    let img = image::open(_infile).expect("Can't open image");
     let mut img2: DynamicImage;
 
     if _rotation_value == 90 {
@@ -151,34 +152,24 @@ fn rotate(_infile: String, _outfile: String, _rotation_value: u32) {
         println!("Invalid rotation value ( choose either 90 or 180 or 270 )");
         std::process::exit(1);
     }
-    // There are 3 rotate functions to choose from (all clockwise):
-    //   .rotate90()
-    //   .rotate180()
-    //   .rotate270()
-    // All three methods return a new image.  Pick one and use it!
 
     img2.save(_outfile).expect("Couldn't save image");
-    // Challenge: parse the rotation amount from the command-line, pass it
-    // through to this function to select which method to call.
-
-    // See blur() for an example of how to save the image.
 }
 
-fn invert(infile: String, outfile: String) {
-    // See blur() for an example of how to open an image.
+fn invert(_infile: String, _outfile: String) {
+    let mut img = image::open(_infile).expect("Can't open image");
 
-    // .invert() takes no arguments and converts the image in-place, so you
-    // will use the same image to save out to a different file.
-
-    // See blur() for an example of how to save the image.
+    img.invert();
+    img.save(_outfile).unwrap();
 }
 
-fn grayscale(infile: String, outfile: String) {
+fn grayscale(_infile: String, _outfile: String) {
     // See blur() for an example of how to open an image.
+    let mut img = image::open(_infile).expect("Can't open image");
 
-    // .grayscale() takes no arguments. It returns a new image.
+    img.grayscale();
 
-    // See blur() for an example of how to save the image.
+    img.save(_outfile);
 }
 
 fn generate(outfile: String) {
