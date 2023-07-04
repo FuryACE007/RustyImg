@@ -2,8 +2,6 @@ use image::DynamicImage;
 
 
 fn main() {
-    // Challenge: If you're feeling really ambitious, you could delete this code
-    // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
     let mut args: Vec<String> = std::env::args().skip(1).collect(); // std::env::args() is a function provided by STL to real CL arguments
     if args.is_empty() {
         println!("No arguments!!!");
@@ -88,7 +86,6 @@ fn main() {
             grayscale(infile, outfile);
         }
 
-        // A VERY DIFFERENT EXAMPLE...a really fun one. :-)
         "fractal" => {
             if args.len() != 1 {
                 print_usage_and_exit();
@@ -97,10 +94,6 @@ fn main() {
             fractal(outfile);
         }
 
-        // **OPTION**
-        // Generate -- see the generate() function below -- this should be sort of like "fractal()"!
-
-        // For everything else...
         _ => {
             print_usage_and_exit();
         }
@@ -111,9 +104,7 @@ fn print_usage_and_exit() {
     println!("USAGE (when in doubt, use a .png extension on your filenames)");
     println!("blur INFILE OUTFILE");
     println!("fractal OUTFILE");
-    // **OPTION**
-    // Print useful information about what subcommands and arguments you can use
-    // println!("...");
+
     std::process::exit(-1);
 }
 
@@ -187,7 +178,6 @@ fn generate(outfile: String) {
     // See blur() for an example of how to save the image
 }
 
-// This code was adapted from https://github.com/PistonDevelopers/image
 fn fractal(_outfile: String) {
     let width = 800;
     let height = 800;
@@ -222,21 +212,3 @@ fn fractal(_outfile: String) {
 
     imgbuf.save(_outfile).unwrap();
 }
-
-// **SUPER CHALLENGE FOR LATER** - Let's face it, you don't have time for this during class.
-//
-// Make all of the subcommands stackable!
-//
-// For example, if you run:
-//
-//   cargo run infile.png outfile.png blur 2.5 invert rotate 180 brighten 10
-//
-// ...then your program would:
-// - read infile.png
-// - apply a blur of 2.5
-// - invert the colors
-// - rotate the image 180 degrees clockwise
-// - brighten the image by 10
-// - and write the result to outfile.png
-//
-// Good luck!
