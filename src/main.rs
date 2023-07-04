@@ -1,4 +1,5 @@
-use image::DynamicImage;
+use clap::builder::Str;
+use image::{DynamicImage, GenericImageView};
 
 
 fn main() {
@@ -85,6 +86,17 @@ fn main() {
             
             grayscale(infile, outfile);
         }
+        
+        "ascii_converter" => {
+            if args.len() >2 {
+                print_usage_and_exit();
+            }
+
+            let infile = args.remove(0);
+            let scale = args.remove(0);
+            
+            get_image(&infile, scale.parse().unwrap());
+        }
 
         "fractal" => {
             if args.len() != 1 {
@@ -163,20 +175,35 @@ fn grayscale(_infile: String, _outfile: String) {
     img.save(_outfile);
 }
 
-fn generate(outfile: String) {
-    // Create an ImageBuffer -- see fractal() for an example
+// helper function
 
-    // Iterate over the coordinates and pixels of the image -- see fractal() for an example
-
-    // Set the image to some solid color. -- see fractal() for an example
-
-    // Challenge: parse some color data from the command-line, pass it through
-    // to this function to use for the solid color.
-
-    // Challenge 2: Generate something more interesting!
-
-    // See blur() for an example of how to save the image
+fn get_str_ascii(intent :u8)-> &'static str{
+    let index = intent/32;
+    let ascii = [" ",".",",","-","~","+","=","@"];
+    return ascii[index as usize];
 }
+
+fn get_image(dir: &str, scale: u32){
+    let img = image::open(dir).unwrap();
+    println!("{:?}", img.dimensions());
+    let (width,height) = img.dimensions();
+    for y in 0..height{
+        for x in 0..width{
+            if y % (scale * 2) == 0 && x % scale ==0{
+                let pix = img.get_pixel(x,y);
+                let mut intent = pix[0]/3 + pix[1]/3 + pix[2]/3;
+                if pix[3] ==0{
+                    intent = 0;
+                }
+                print!("{}",get_str_ascii(intent));
+            } 
+        }
+        if y%(scale*2)==0{
+            println!("");
+        }
+    }
+}
+
 
 fn fractal(_outfile: String) {
     let width = 800;
