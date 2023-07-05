@@ -1,4 +1,3 @@
-use clap::builder::Str;
 use image::{DynamicImage, GenericImageView};
 
 
@@ -233,7 +232,6 @@ fn fractal(_outfile: String) {
             green += 1;
         }
 
-        // Actually set the pixel. red, green, and blue are u8 values!
         *pixel = image::Rgb([red, green, blue]);
     }
 
