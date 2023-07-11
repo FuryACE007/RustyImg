@@ -2,6 +2,7 @@
 # Rusty IMG v1.0
 
 A simple image processing tool built using Rust.
+Note, RustyIMG v2.0 is under development. You can peek into the repo XD: https://github.com/FuryACE007/rusty-img-v2.0.git
 
 ## licenses
 
